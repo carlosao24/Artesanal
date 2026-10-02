@@ -4,53 +4,90 @@ import java.util.ArrayList;
 
 public class NegocioMejorado {
 
-    private ArrayList<Maquina> maquinas;
+	private ArrayList<Maquina> maquinas;
+	private ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+	private int ultimoCodigo;
 
-    public NegocioMejorado() {
-        this.maquinas = new ArrayList<Maquina>();
-    }
+	public NegocioMejorado() {
+		this.maquinas = new ArrayList<Maquina>();
+	}
 
-    public ArrayList<Maquina> getMaquinas() {
-        return maquinas;
-    }
+	public ArrayList<Maquina> getMaquinas() {
+		return maquinas;
+	}
 
-    public void setMaquinas(ArrayList<Maquina> maquinas) {
-        this.maquinas = maquinas;
-    }
+	public void setMaquinas(ArrayList<Maquina> maquinas) {
+		this.maquinas = maquinas;
+	}
 
-    public String generarCodigo() {
-        int numero = (int) (Math.random() * 100) + 1; // número entre 1 y 100
-        return "M-" + numero;
-    }
+	public ArrayList<Cliente> getClientes() {
+		return clientes;
+	}
 
-    // Ya incluye la validación de duplicados (punto 7)
-    public boolean agregarMaquina(String nombreCerveza, String descripcion, double precioPorMl) {
-        String codigo = generarCodigo();
+	public void setClientes(ArrayList<Cliente> clientes) {
+		this.clientes = clientes;
+	}
 
-        // Si ya existe una máquina con ese código → duplicado
-        if (recuperarMaquina(codigo) != null) {
-            return false;
-        }
+	public String generarCodigo() {
+		int numero = (int) (Math.random() * 100) + 1;
+		return "M-" + numero;
+	}
 
-        Maquina maquina = new Maquina(nombreCerveza, descripcion, precioPorMl, codigo);
-        maquinas.add(maquina);
-        return true;
-    }
+	public boolean agregarMaquina(String nombreCerveza, String descripcion, double precioPorMl) {
+		String codigo = generarCodigo();
 
-    public void cargarMaquinas() {
-        for (int i = 0; i < maquinas.size(); i++) {
-            maquinas.get(i).llenarMaquina();
-        }
-    }
+		if (recuperarMaquina(codigo) != null) {
+			return false;
+		}
 
-    public Maquina recuperarMaquina(String codigo) {
-        Maquina encontrada = null;
-        for (int i = 0; i < maquinas.size(); i++) {
-            Maquina m = maquinas.get(i);
-            if (m.getCodigo().equals(codigo)) { // ¡con equals(), no con ==!
-                encontrada = m;
-            }
-        }
-        return encontrada;
-    }
+		Maquina maquina = new Maquina(nombreCerveza, descripcion, precioPorMl, codigo);
+		maquinas.add(maquina);
+		return true;
+	}
+
+	public void cargarMaquinas() {
+		for (int i = 0; i < maquinas.size(); i++) {
+			maquinas.get(i).llenarMaquina();
+		}
+	}
+
+	public Maquina recuperarMaquina(String codigo) {
+		Maquina encontrada = null;
+		for (int i = 0; i < maquinas.size(); i++) {
+			Maquina m = maquinas.get(i);
+			if (m.getCodigo().equals(codigo)) {
+				encontrada = m;
+			}
+		}
+		return encontrada;
+	}
+
+	public void registrarCliente(String nombre, String cedula) {
+		ultimoCodigo = ultimoCodigo + 1;
+		String codigo = "C-" + ultimoCodigo;
+		Cliente cliente = new Cliente(codigo, nombre, cedula);
+		clientes.add(cliente);
+	}
+
+	public Cliente buscarClientePorCedula(String cedula) {
+		Cliente encontrada = null;
+		for (int i = 0; i < clientes.size(); i++) {
+			Cliente c = clientes.get(i);
+			if (c.getCedula().equals(cedula)) {
+				encontrada = c;
+			}
+		}
+		return encontrada;
+	}
+
+	public Cliente buscarClientePorCodigo(String codigo) {
+		Cliente encontrada = null;
+		for (int i = 0; i < clientes.size(); i++) {
+			Cliente c = clientes.get(i);
+			if (c.getCodigo().equals(codigo)) {
+				encontrada = c;
+			}
+		}
+		return encontrada;
+	}
 }
