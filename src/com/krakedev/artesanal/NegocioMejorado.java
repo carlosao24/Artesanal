@@ -90,4 +90,36 @@ public class NegocioMejorado {
 		}
 		return encontrada;
 	}
+	
+    public void registrarConsumo(Cliente cliente, double valorConsumo) {
+        double acumulado = cliente.getTotalConsumido() + valorConsumo;
+        cliente.setTotalConsumido(acumulado);
+    }
+
+    public double consumirCerveza(String codigoCliente, String codigoMaquina, double cantidad) {
+        Maquina maquina = recuperarMaquina(codigoMaquina);
+        Cliente cliente = buscarClientePorCodigo(codigoCliente);
+
+        if (maquina == null) {
+            System.out.println("Máquina no existe: " + codigoMaquina);
+            return 0;
+        }
+        if (cliente == null) {
+            System.out.println("Cliente no existe: " + codigoCliente);
+            return 0;
+        }
+
+        double valorConsumo = maquina.servirCerveza(cantidad);
+        registrarConsumo(cliente, valorConsumo);
+        return valorConsumo;
+    }
+
+    public double consultarValorVendido() {
+        double totalVendido = 0;
+        for (int i = 0; i < clientes.size(); i++) {
+            Cliente c = clientes.get(i);
+            totalVendido = totalVendido + c.getTotalConsumido();
+        }
+        return totalVendido;
+    }
 }
